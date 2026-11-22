@@ -56,6 +56,16 @@
  </form>
 </div>
 <div id="app"></div>
+<script>
+/* armazenamento à prova de "quota exceeded": limpa caches temporários e, se ainda falhar, guarda só na memória */
+(function(){const P=Storage.prototype,orig=P.setItem,MEM={};const VOL=['cm_open','cm_dxs','cm_an','cm_an2','cm_an3','cm_ex','cm_ex2','cm_tmp','cm_rxa','cm_sc','cm_qd','cm_pt','pp_open','pp_qd','pp_pt','pp_an2','pp_exf'];
+ P.setItem=function(k,v){try{return orig.call(this,k,v)}catch(e){
+   try{VOL.forEach(x=>{try{this.removeItem(x)}catch(_){}});if(this!==sessionStorage)VOL.forEach(x=>{try{sessionStorage.removeItem(x)}catch(_){}});return orig.call(this,k,v)}catch(e2){
+     try{if(this===localStorage){sessionStorage.setItem(k,v);return}}catch(_){}
+     MEM[k]=String(v);if(!window.__memWarn){window.__memWarn=1;setTimeout(()=>{const t=document.getElementById('toast');if(t){t.textContent='Armazenamento do navegador cheio/bloqueado — dados ficam só nesta sessão';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000)}},1500)}}}};
+ const og=P.getItem;P.getItem=function(k){const v=og.call(this,k);return v==null&&k in MEM?MEM[k]:v};
+})();
+</script>
 <script src="config.js"></script>
 <script>
 (function(){
