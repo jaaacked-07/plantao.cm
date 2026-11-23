@@ -1,4 +1,4 @@
-const C='pcm-3076ea5b';
+const C='pcm-b10db78d';
 const F=['./','index.html','config.js','app.enc','users.json','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C&&(x.startsWith('pcm-')||x.startsWith('plantao-cm-'))).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
